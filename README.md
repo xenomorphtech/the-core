@@ -8,7 +8,7 @@ an opensource language learning tool
 - fast feedback
 - games on which u have to use voice commands to interact with the environment
 
-# fearues 
+# features 
 
 - word to image database
 - word to image collective db
@@ -20,7 +20,11 @@ an opensource language learning tool
 
 ## english
 - phonics
-feedback on phonics based on text recognition
+feedback on phonics based on speech recognition
+- assisted reading (text to speech)
+  highlithing the current word being spoken
+  display images related to the word, 
+
 - build vocabulary
 through interacting with a virtual environment using voice
 
