@@ -2,7 +2,7 @@
 an opensource language learning tool
 
 # goals
-- completely replace the "school" on reading skill training
+- completely develop reading skills from zero, without supervision
 - fast feedback
 - games on which u have to use voice commands to interact with the environment
 
