@@ -1,8 +1,10 @@
 # the-core
 an opensource language learning tool
 
+# ultimate goals
+- (ULTIMATE) completely develop reading skills from zero, without supervision
+
 # goals
-- completely develop reading skills from zero, without supervision
 - fast feedback
 - games on which u have to use voice commands to interact with the environment
 
