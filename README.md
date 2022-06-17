@@ -8,7 +8,7 @@ an opensource language learning tool
 - fast feedback
 - games on which u have to use voice commands to interact with the environment
 
-# goals
+# fearues 
 
 - word to image database
 - word to image collective db
