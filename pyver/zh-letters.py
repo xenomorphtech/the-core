@@ -70,7 +70,7 @@ def read_conf():
     try:
         f = json.loads(open("playdata.json").read())
     except:
-        f = {"performance": {}, "maxfreq": 100, "min_exposure": 1000}
+        f = {"performance": {}, "maxfreq": 1000, "min_exposure": 1000}
     return f
 
 playdata = read_conf()
@@ -126,7 +126,7 @@ def next_word():
     randomboard = [frequency[a] for a in random.sample(nrange, len(nrange))]
     randomboard.remove(word)
     inject = random.randint(1, 47)
-    print("inject" + str(inject))
+    #print("inject" + str(inject))
     randomboard[inject] = word
     #print(randomboard)
     clicked = False 
