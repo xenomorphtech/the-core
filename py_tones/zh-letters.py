@@ -80,11 +80,9 @@ cell_space = 60
 cell_per_row = 6
 
 def render_pickword():
-    global screen, font, word, playdata
+    global screen, font, word, playdata, chooses
     #print("---")
     min_time = playdata["performance"][word] if word in playdata["performance"] else 0 
-    text = font.render("min time: "+str(min_time), True, WHITE)
-    screen.blit(text, [30, 8 * 60 + 30])
 
     opts = [
             "q - first",
@@ -93,10 +91,11 @@ def render_pickword():
             "r - fourth",
             "t - neutral"
                  ]
+
     for y in range(0, len(opts)):
             color = WHITE 
             target = opts[y]
-            if clicked and (pos == (x, y)):
+            if clicked and (pos == y):
                 color = RED
             if clicked and (target == word):
                 color = GREEN 
@@ -104,6 +103,12 @@ def render_pickword():
             text = font.render(target, True, color)
             x = info.current_w/2 - (len(target) * 8)
             screen.blit(text, [x, 30 + y * cell_space])
+
+    mid_w = info.current_w/2
+    for a in range(len(chooses)):
+        color = RED if chooses[a] != tones[a] else GREEN
+        text = font.render(chooses[a], True, color)
+        screen.blit(text, [mid_w - len(tones) * 15 + 30 * a, 8 * 60 + 30])
 
 
     #for x in range(0, cell_per_row):
@@ -120,7 +125,7 @@ def render_pickword():
     #        screen.blit(text, [30 + x * cell_space, 30 + y * cell_space])
 
 def next_word():
-    global phase, start_time, word, randomboard, clicked, right_pos
+    global phase, start_time, word, randomboard, clicked, right_pos, tones, chooses
 
     path = 'sounds/%s' % random.choice(sounds)
     pinyin_with_tones = path.split('/')[-1][:-len('.ogg')].split('_')
@@ -135,6 +140,7 @@ def next_word():
     start_time = time.time()
     phase = "showword"
     clicked = False 
+    chooses = ""
   
 def show_pick():
     global phase, start_time, playdata
@@ -152,29 +158,23 @@ def showword_proc_event(event):
         show_pick()
     elif event.type == pygame.KEYDOWN and event.key == 32: 
         show_pick()
- 
+
+keys = [ord(k) for k in "qwert"]
+
+def keypos(key):
+   if not(key in keys):
+       return None
+   return keys.index(key) 
+
 def pickword_proc_event(event):
-    global clicked, selected, pos, start_time
-    if event.type == pygame.MOUSEBUTTONUP:
-        (x, y) = pygame.mouse.get_pos()
-        print((x,y))
-        pos = (int((x - 30) / cell_space), int((y-30)/cell_space))
-        print(pos)
-        (pos_x, pos_y) = pos
-        cell = pos_x + pos_y * cell_per_row 
-        clicked = True
-        elapsed = time.time() - start_time
-        prev_elapsed = playdata["performance"][word] if word in playdata["performance"] else elapsed
-        if (randomboard[cell] == word) and (elapsed <= prev_elapsed): 
-          playdata["performance"][word] = elapsed 
+    global clicked, selected, pos, start_time, tones, chooses
+    if event.type == pygame.KEYDOWN and keypos(event.key) != None: 
+        pos = keypos(event.key)
+        chooses += "%d" % (pos+1)
+        if len(chooses) == len(tones):
+            clicked = True
         start_time = time.time()
-    elif event.type == pygame.KEYDOWN and event.key == 32: 
-        done = True 
-        clicked = True
-        playdata["performance"][word] = time.time() - start_time 
-        start_time = time.time()
-        pos = (0, 0)
- 
+
 
 while not done:
     events = pygame.event.get()

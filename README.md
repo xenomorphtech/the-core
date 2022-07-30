@@ -20,12 +20,13 @@ an opensource language learning tool
 
 ## english
 - phonics
-feedback on phonics based on speech recognition
-- assisted reading (text to speech)
-  highlithing the current word being spoken
-  display images related to the word, 
+  feedback on phonics based on speech recognition
+- assisted reading
+  use tts with synchronized highlight
+  display image/s related to the current word(context free, language-independent information about the words meaning)
 
 - build vocabulary
 through interacting with a virtual environment using voice
 
-
+# generic audio to phonics sdks
+allosaurus - https://github.com/xinjli/allosaurus
