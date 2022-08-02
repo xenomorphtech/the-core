@@ -170,7 +170,8 @@ def pickword_proc_event(event):
     global clicked, selected, pos, start_time, tones, chooses
     if event.type == pygame.KEYDOWN and keypos(event.key) != None: 
         pos = keypos(event.key)
-        chooses += "%d" % (pos+1)
+        if len(chooses) < len(tones):
+            chooses += "%d" % (pos+1)
         if len(chooses) == len(tones):
             clicked = True
         start_time = time.time()
