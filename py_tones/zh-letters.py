@@ -110,6 +110,12 @@ def render_pickword():
         text = font.render(chooses[a], True, color)
         screen.blit(text, [mid_w - len(tones) * 15 + 30 * a, 8 * 60 + 30])
 
+    for a in range(len(chooses)):
+        color = WHITE 
+        text = font.render(tones[a], True, color)
+        screen.blit(text, [mid_w - len(tones) * 15 + 30 * a, 9 * 60 + 30])
+
+
 
     #for x in range(0, cell_per_row):
     #    for y in range(0, 8):
@@ -124,10 +130,33 @@ def render_pickword():
     #        text = font.render(target, True, color)
     #        screen.blit(text, [30 + x * cell_space, 30 + y * cell_space])
 
-def next_word():
-    global phase, start_time, word, randomboard, clicked, right_pos, tones, chooses
+def tones(s):
+    pinyin_with_tones = s[:-len('.ogg')].split('_')
+    tones = ''.join(x[-1] for x in pinyin_with_tones)
+    return tones
 
-    path = 'sounds/%s' % random.choice(sounds)
+sounds = [s for s in sounds if len(tones(s)) < 3]
+#sounds = [s for s in sounds if tones(s) != "44"]
+#sounds = [s for s in sounds if tones(s) == "24" or tones(s) == "42"]
+v = {}
+for s in sounds:
+    a = tones(s)
+    if a in v:
+              v[a].append(s)
+    else:
+              v[a] = [s] 
+
+#print(sounds)
+#sounds = [s for s in sounds if tones(s) == "1" or tones(s) == "3"]
+#sounds = [s for s in sounds if tones(s) == "2" or tones(s) == "4"]
+
+
+
+def next_word():
+    global phase, start_time, word, randomboard, clicked, right_pos, tones, chooses, v
+
+    r = random.choice(list(v.keys()))
+    path = 'sounds/%s' % random.choice(v[r]) 
     pinyin_with_tones = path.split('/')[-1][:-len('.ogg')].split('_')
     tones = ''.join(x[-1] for x in pinyin_with_tones)
     pinyin_without_tones = [x[:-1] for x in pinyin_with_tones]
@@ -138,7 +167,7 @@ def next_word():
 
     word = "".join(pinyin_without_tones)
     start_time = time.time()
-    phase = "showword"
+    phase = "pickword"
     clicked = False 
     chooses = ""
   
