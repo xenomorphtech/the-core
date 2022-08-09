@@ -68,9 +68,9 @@ playdata = read_conf()
 try:
  from android import loadingscreen
  loadingscreen.hide_loading_screen()
-# from android.permissions import request_permissions, Permission
-# request_permissions([Permission.INTERNET])
-# request_permissions([Permission.ACCESS_NETWORK_STATE])
+ # from android.permissions import request_permissions, Permission
+ # request_permissions([Permission.INTERNET])
+ # request_permissions([Permission.ACCESS_NETWORK_STATE])
  playres = "ok|"
 except Exception as e:
     playres = str(e)
@@ -94,8 +94,14 @@ except Exception as e:
 #    sock.send(bytes(str(e)+"\r\n", "utf-8"))
 
 
+#soundObj = pygame.mixer.Sound(open("sound_effects/error-sound-39539.ogg", "br"))
+#soundObj.play()
+
+
 def render_init():
     global screen, font, word, playres
+    
+
     text = font1.render("开始", True, WHITE)
     screen.blit(text, [info.current_w/2 - 50, info.current_h/2 - 25])
     text = font1.render("%d x %d" % (info.current_w, info.current_h), True, WHITE)
@@ -127,6 +133,14 @@ opts = [
             ("r - fourth", ((w_10*11, 300), (w_10 * 8, 100)), "4"),
                  ]
 
+opts = [
+            ("q - first", ((w_10, 100), (w_10 * 18, 80)), "1"),
+            ("w - second", ((w_10, 200), (w_10 * 18, 80)), "2"),
+            ("e - third", ((w_10, 300), (w_10 * 18, 80)), "3"),
+            ("r - fourth", ((w_10, 400), (w_10 * 18, 80)), "4"),
+                 ]
+
+
 
 def render_pickword():
     global screen, font, word, playdata, chooses
@@ -152,6 +166,10 @@ def render_pickword():
         text = font.render(chooses[a], True, color)
         screen.blit(text, [mid_w - len(tones) * 15 + 30 * a, 8 * 60 + 30])
 
+    for a in range(len(chooses)):
+        color = WHITE 
+        text = font.render(tones[a], True, color)
+        screen.blit(text, [mid_w - len(tones) * 15 + 30 * a, 9 * 60 + 30])
 
     #for x in range(0, cell_per_row):
     #    for y in range(0, 8):
@@ -166,10 +184,35 @@ def render_pickword():
     #        text = font.render(target, True, color)
     #        screen.blit(text, [30 + x * cell_space, 30 + y * cell_space])
 
-def next_word():
-    global phase, start_time, word, randomboard, clicked, right_pos, tones, chooses
+def tones(s):
+    pinyin_with_tones = s[:-len('.ogg')].split('_')
+    tones = ''.join(x[-1] for x in pinyin_with_tones)
+    return tones
 
-    path = 'sounds/%s' % random.choice(sounds)
+sounds = [s for s in sounds if len(tones(s)) < 3]
+#sounds = [s for s in sounds if tones(s) != "44"]
+#sounds = [s for s in sounds if tones(s) == "24" or tones(s) == "42"]
+#sounds = [s for s in sounds if tones(s) == "1" or tones(s) == "3"]
+#sounds = [s for s in sounds if tones(s) == "2" or tones(s) == "4"]
+
+v = {}
+for s in sounds:
+    a = tones(s)
+    if a in v:
+              v[a].append(s)
+    else:
+              v[a] = [s] 
+
+from numpy.random import default_rng
+rng = default_rng()
+chooses = ""
+
+def next_word():
+    global phase, start_time, word, randomboard, clicked, right_pos, tones, chooses, v
+
+
+    r = rng.choice(list(v.keys()))
+    path = 'sounds/%s' % rng.choice(v[r]) 
     pinyin_with_tones = path.split('/')[-1][:-len('.ogg')].split('_')
     tones = ''.join(x[-1] for x in pinyin_with_tones)
     pinyin_without_tones = [x[:-1] for x in pinyin_with_tones]
@@ -209,6 +252,7 @@ def keypos(key):
 
 def pickword_proc_event(event):
     global clicked, selected, pos, start_time, tones, chooses
+    clicked_before = clicked
     if event.type == pygame.MOUSEBUTTONUP:
         (x, y) = pygame.mouse.get_pos()
         button = None
@@ -223,7 +267,6 @@ def pickword_proc_event(event):
                 clicked = True
             start_time = time.time()
 
-
     if event.type == pygame.KEYDOWN and keypos(event.key) != None: 
         pos = keypos(event.key)
         if len(chooses) < len(tones):
@@ -231,6 +274,12 @@ def pickword_proc_event(event):
         if len(chooses) == len(tones):
             clicked = True
         start_time = time.time()
+
+    if clicked != clicked_before and chooses == tones:
+
+      soundObj = pygame.mixer.Sound(open("sound_effects/sound-effects-finger-snap-without-reverb-113862.ogg", "br"))
+      soundObj.play()
+
 
 try:
  while not done:
@@ -259,8 +308,6 @@ try:
         if phase == "pickword":
             if (clicked == True) and (time.time() - start_time > 0.500):
              next_word()
- 
-
  
     screen.fill(BLACK)
  
