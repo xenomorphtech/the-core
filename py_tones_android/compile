@@ -1,0 +1,6 @@
+export ANDROIDSDK="/home/sdancer/android/"
+export ANDROIDNDK="/home/sdancer/android/android-ndk-r19c"
+export ANDROIDAPI="27"  # Target API version of your application
+export NDKAPI="21"  # Minimum supported API version of your application
+export ANDROIDNDKVER="r19c"  # Version of the NDK you installed
+p4a apk --permission=INTERNET --permission WRITE_EXTERNAL_STORAGE --permission READ_EXTERNAL_STORAGE --requirements=python3,pygame,numpy,unpythonic,android --private /home/sdancer/the-core/py_tones_android --package=net.inclem.planewavessdl2 --name=planewavessdl2 --version=0.5 --bootstrap=sdl2 --arch=arm64-v8a --arch=armeabi-v7a
