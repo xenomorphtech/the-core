@@ -204,6 +204,9 @@ for s in sounds:
     else:
               v[a] = [s] 
 
+#for k in v.keys():
+# print(k, len(v[k]))
+
 from numpy.random import default_rng
 rng = default_rng()
 chooses = ""
@@ -211,9 +214,9 @@ chooses = ""
 def next_word():
     global phase, start_time, word, randomboard, clicked, right_pos, tones, chooses, v
 
-
     r = rng.choice(list(v.keys()))
-    path = 'sounds/%s' % rng.choice(v[r]) 
+    index = int(rng.uniform(0, len(v[r])))
+    path = 'sounds/%s' % v[r][index] 
     pinyin_with_tones = path.split('/')[-1][:-len('.ogg')].split('_')
     tones = ''.join(x[-1] for x in pinyin_with_tones)
     pinyin_without_tones = [x[:-1] for x in pinyin_with_tones]
