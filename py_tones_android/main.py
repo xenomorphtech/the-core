@@ -48,10 +48,11 @@ pygame.display.set_caption("pick char")
 done = False
 clock = pygame.time.Clock()
 
-font = pygame.font.SysFont('Source Han Sans CN', 30, True, False)
+info = pygame.display.Info()
+
+font = pygame.font.SysFont('Source Han Sans CN', int(info.current_w / 13) , True, False)
 font1 = pygame.font.SysFont('Source Han Sans CN', 50, True, False)
 
-info = pygame.display.Info()
 
 import json
 
