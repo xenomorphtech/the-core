@@ -82,8 +82,8 @@ try:
     # create an INET, STREAMing socket
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     # now connect to the web server on port 80 - the normal http port
-    sock.connect(("192.168.2.5", 9002))
-    sock.send(bytes("connected\r\n", "utf-8"))
+    #sock.connect(("192.168.2.5", 9002))
+    #sock.send(bytes("connected\r\n", "utf-8"))
 
 
     #soundObj = pygame.mixer.Sound("sounds/ai2.ogg")
@@ -226,7 +226,7 @@ def next_word():
 
     word = "".join(pinyin_without_tones)
     start_time = time.time()
-    phase = "showword"
+    phase = "pickword"
     clicked = False 
     chooses = ""
   
